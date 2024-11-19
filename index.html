@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enhanced Reminder App</title>
+    <title>Reminder App</title>
     <style>
-        /* General Styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -15,31 +14,23 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            animation: gradient-animation 10s infinite alternate;
             color: #fff;
-        }
-
-        @keyframes gradient-animation {
-            0% {
-                background: linear-gradient(135deg, #6a11cb, #2575fc);
-            }
-            50% {
-                background: linear-gradient(135deg, #ff5f6d, #ffc371);
-            }
-            100% {
-                background: linear-gradient(135deg, #36d1dc, #5b86e5);
-            }
+            overflow: hidden;
+            transition: background 3s ease; /* Smooth transition for background change */
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(5px); /* Reduced blur for better visibility */
             padding: 20px;
             border-radius: 16px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            width: 400px;
+            width: 90%; /* Responsive width */
+            max-width: 400px; /* Limit max width */
+            box-sizing: border-box;
             transform: scale(0.9);
             transition: transform 0.3s ease-in-out;
+            overflow: hidden; /* Prevent overflow */
         }
 
         .container:hover {
@@ -53,17 +44,7 @@
             background: linear-gradient(to right, #6a11cb, #2575fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            font-size: 2rem;
-            animation: fade-in 1s ease-in-out;
-        }
-
-        @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            font-size: 1.8rem;
         }
 
         input, button {
@@ -74,26 +55,25 @@
             border-radius: 8px;
             font-size: 1rem;
             transition: all 0.3s ease;
+            box-sizing: border-box;
         }
 
         input:focus {
             outline: none;
-            box-shadow: 0 0 10px rgba(81, 203, 238, 1);
-            border-color: #51cbee;
+            border-color: #2575fc;
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.4);
         }
 
         button {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
             color: white;
             border: none;
             cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            font-size: 1rem;
         }
 
         button:hover {
-            background: linear-gradient(to right, #ff5f6d, #ffc371);
+            background: linear-gradient(90deg, #2575fc, #6a11cb);
             transform: scale(1.05);
         }
 
@@ -101,7 +81,6 @@
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
-            animation: fade-in 1s ease-in-out;
         }
 
         th, td {
@@ -109,36 +88,41 @@
             text-align: left;
             padding: 10px;
             font-size: 0.9rem;
+            word-wrap: break-word;
+            color: #333; /* Improved text contrast */
+            background-color: #fff; /* White background for table cells */
         }
 
         th {
-            background: linear-gradient(to right, #36d1dc, #5b86e5);
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
             color: white;
         }
-
-        td {
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #333;
-            transition: background-color 0.3s ease;
-        }
-
-        tr:hover td {
-            background-color: rgba(81, 203, 238, 0.3);
-        }
-
+    
         .deleteBtn {
-            background-color: #ff5f6d;
-            border: none;
+            background: linear-gradient(90deg, #ff5f6d, #ffc371);
             color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
             cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease;
+            transition: background 0.3s ease-in-out;
+        }
+    
+        .deleteBtn:hover {
+            background: linear-gradient(90deg, #ffc371, #ff5f6d);
         }
 
-        .deleteBtn:hover {
-            background-color: #d43851;
-            transform: scale(1.1);
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+            input, button {
+                padding: 10px;
+                font-size: 0.9rem;
+            }
+            th, td {
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
@@ -169,6 +153,21 @@
         document.addEventListener('DOMContentLoaded', () => {
             const reminderForm = document.getElementById('reminderForm');
             const reminderList = document.getElementById('reminderList');
+
+            // Function to change the background gradient
+            function changeBackground() {
+                const gradients = [
+                    'linear-gradient(135deg, #6a11cb, #2575fc)',
+                    'linear-gradient(135deg, #2575fc, #ff6347)',
+                    'linear-gradient(135deg, #ff6347, #32cd32)',
+                    'linear-gradient(135deg, #32cd32, #ff1493)',
+                ];
+                const randomIndex = Math.floor(Math.random() * gradients.length);
+                document.body.style.background = gradients[randomIndex];
+            }
+
+            // Change the background every 3 seconds
+            setInterval(changeBackground, 3000);
 
             reminderForm.addEventListener('submit', (event) => {
                 event.preventDefault();
