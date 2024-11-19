@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminder App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        input, button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Reminder App</h1>
+        <form id="reminderForm">
+            <input type="text" id="title" placeholder="Title" required>
+            <input type="text" id="description" placeholder="Description" required>
+            <input type="date" id="date" required>
+            <input type="time" id="time" required>
+            <button type="submit">Schedule Reminder</button>
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Date & Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="reminderList"></tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reminderForm = document.getElementById('reminderForm');
+            const reminderList = document.getElementById('reminderList');
+
+            reminderForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const title = document.getElementById('title').value;
+                const description = document.getElementById('description').value;
+                const date = document.getElementById('date').value;
+                const time = document.getElementById('time').value;
+
+                if (!title || !description || !date || !time) {
+                    alert('All fields are required!');
+                    return;
+                }
+
+                const reminderDateTime = new Date(`${date}T${time}`);
+                const now = new Date();
+
+                if (reminderDateTime <= now) {
+                    alert('Please select a future date and time.');
+                    return;
+                }
+
+                // Add the reminder to the table
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${title}</td>
+                    <td>${description}</td>
+                    <td>${date} ${time}</td>
+                    <td><button class="deleteBtn">Delete</button></td>
+                `;
+                reminderList.appendChild(row);
+
+                // Schedule the notification
+                setTimeout(() => {
+                    new Notification(title, {
+                        body: description,
+                    });
+                }, reminderDateTime - now);
+
+                // Clear the form
+                reminderForm.reset();
+            });
+
+            // Enable Notification permissions
+            if (Notification.permission !== 'granted') {
+                Notification.requestPermission();
+            }
+
+            // Handle delete button click
+            reminderList.addEventListener('click', (event) => {
+                if (event.target.classList.contains('deleteBtn')) {
+                    event.target.closest('tr').remove();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
